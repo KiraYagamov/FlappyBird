@@ -8,6 +8,7 @@ public class UI : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private GameObject buttons;
     [SerializeField] private Text scoreText;
+    [SerializeField] private GameObject gameOver;
 
     private void Start()
     {
@@ -21,6 +22,11 @@ public class UI : MonoBehaviour
         buttons.SetActive(true);
     }
 
+    public void GameOver()
+    {
+        gameOver.SetActive(true);
+    }
+
     public void CloseMenu()
     {
         if (PlayerController.IsGameOver)
@@ -31,10 +37,17 @@ public class UI : MonoBehaviour
         Time.timeScale = 1;
         panel.SetActive(false);
         buttons.SetActive(false);
+        gameOver.SetActive(false);
     }
 
     public void SetScore(int score, int maxScore)
     {
         scoreText.text = $"{score}/{maxScore}";
+    }
+
+    public void Menu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Menu");
     }
 }
