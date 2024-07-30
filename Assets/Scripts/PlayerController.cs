@@ -1,4 +1,8 @@
+using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviour
 {
@@ -6,6 +10,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce;
     public static bool IsGameOver = false;
     [SerializeField] private Animator animator;
+    [SerializeField] private VolumeProfile profile;
+    public static float GameSpeed = 1;
+
+    private void Start()
+    {
+        WallMove.SpeedMult = 1;
+        StartCoroutine(ChangeColor());
+        if (profile.TryGet(out ColorAdjustments colorAdjustments))
+        {
+            colorAdjustments.hueShift.value = 0;
+        }
+        if (profile.TryGet(out ChromaticAberration chromatic))
+        {
+            chromatic.intensity.value = 0;
+        }
+        if (profile.TryGet(out FilmGrain filmGrain))
+        {
+            filmGrain.intensity.value = 0;
+        }
+    }
 
     private void Update()
     {
@@ -18,6 +42,35 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             UI.Main.ShowMenu();
+        }
+    }
+
+    private IEnumerator ChangeColor()
+    {
+        while (true)
+        {
+            if (profile.TryGet(out ColorAdjustments colorAdjustments))
+            {
+                colorAdjustments.hueShift.value += 1;
+                if (colorAdjustments.hueShift.value == 180)
+                {
+                    colorAdjustments.hueShift.value = -180;
+                }
+            }
+            if (profile.TryGet(out ChromaticAberration chromatic))
+            {
+                chromatic.intensity.value += 0.05f;
+            }
+            if (profile.TryGet(out FilmGrain filmGrain))
+            {
+                filmGrain.intensity.value += 0.05f;
+            }
+
+            WallMove.SpeedMult += 0.01f;
+            GameSpeed += 0.002f;
+            Time.timeScale = GameSpeed;
+
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

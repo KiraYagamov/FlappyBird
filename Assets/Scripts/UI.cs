@@ -33,8 +33,9 @@ public class UI : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             PlayerController.IsGameOver = false;
+            PlayerController.GameSpeed = 1;
         }
-        Time.timeScale = 1;
+        Time.timeScale = PlayerController.GameSpeed;
         panel.SetActive(false);
         buttons.SetActive(false);
         gameOver.SetActive(false);
