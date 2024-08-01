@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 120;
         WallMove.SpeedMult = 1;
         StartCoroutine(ChangeColor());
         if (profile.TryGet(out ColorAdjustments colorAdjustments))
